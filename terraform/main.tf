@@ -26,6 +26,14 @@ resource "google_storage_bucket_access_control" "public_rule" {
   entity = "allUsers"
 }
 
+// Allow unauthenticated invocations (required for MCP clients)
+resource "google_cloud_run_v2_service_iam_member" "noauth" {
+  name     = google_cloud_run_v2_service.podcast_service.name
+  location = google_cloud_run_v2_service.podcast_service.location
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
+
 // Google Cloud Run Service for hosting the podcast MCP
 resource "google_cloud_run_v2_service" "podcast_service" {
   name     = "podcast-service"
