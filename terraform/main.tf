@@ -28,7 +28,7 @@ resource "google_storage_bucket_access_control" "public_rule" {
 
 // Google Cloud Run Service for hosting the podcast MCP
 resource "google_cloud_run_v2_service" "podcast_service" {
-  name     = "podcast_service"
+  name     = "podcast-service"
   location = "us-central1"
   ingress  = "INGRESS_TRAFFIC_ALL"
 
