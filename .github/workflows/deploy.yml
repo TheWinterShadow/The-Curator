@@ -125,18 +125,18 @@ jobs:
         run: terraform init
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
-          TF_VAR_cloud_run_image: ${{ env.IMAGE_URI }}
+          TF_VAR_podcast_service_image_uri: ${{ env.IMAGE_URI }}
 
       - name: Terraform Plan
         working-directory: terraform
         run: terraform plan -input=false
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
-          TF_VAR_cloud_run_image: ${{ env.IMAGE_URI }}
+          TF_VAR_podcast_service_image_uri: ${{ env.IMAGE_URI }}
 
       - name: Terraform Apply
         working-directory: terraform
         run: terraform apply -auto-approve -input=false
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
-          TF_VAR_cloud_run_image: ${{ env.IMAGE_URI }}
+          TF_VAR_podcast_service_image_uri: ${{ env.IMAGE_URI }}
