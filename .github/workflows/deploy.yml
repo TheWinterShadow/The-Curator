@@ -22,9 +22,6 @@ jobs:
       - name: Install Hatch
         run: pip install hatch
 
-      - name: Install dependencies
-        run: hatch env create dev
-
       - name: Ruff Check & Format
         run: |
            hatch run ruff check src tests
