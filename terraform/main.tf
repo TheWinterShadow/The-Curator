@@ -51,16 +51,18 @@ resource "google_service_account" "podcast_service" {
 
 // Grant the SA access to GCS for episode uploads and OAuth state
 resource "google_storage_bucket_iam_member" "podcast_service_storage" {
-  bucket = google_storage_bucket.podcast_data.name
-  role   = "roles/storage.objectAdmin"
-  member = "serviceAccount:${google_service_account.podcast_service.email}"
+  depends_on = [google_service_account.podcast_service]
+  bucket     = google_storage_bucket.podcast_data.name
+  role       = "roles/storage.objectAdmin"
+  member     = "serviceAccount:${google_service_account.podcast_service.email}"
 }
 
 // Grant the SA access to Vertex AI (Gemini TTS + transcript generation)
 resource "google_project_iam_member" "podcast_service_aiplatform" {
-  project = "the-curator-496412"
-  role    = "roles/aiplatform.user"
-  member  = "serviceAccount:${google_service_account.podcast_service.email}"
+  depends_on = [google_service_account.podcast_service]
+  project    = "the-curator-496412"
+  role       = "roles/aiplatform.user"
+  member     = "serviceAccount:${google_service_account.podcast_service.email}"
 }
 
 
@@ -148,9 +150,10 @@ resource "google_storage_bucket" "oauth_state" {
 }
 
 resource "google_storage_bucket_iam_member" "podcast_service_oauth_storage" {
-  bucket = google_storage_bucket.oauth_state.name
-  role   = "roles/storage.objectAdmin"
-  member = "serviceAccount:${google_service_account.podcast_service.email}"
+  depends_on = [google_service_account.podcast_service]
+  bucket     = google_storage_bucket.oauth_state.name
+  role       = "roles/storage.objectAdmin"
+  member     = "serviceAccount:${google_service_account.podcast_service.email}"
 }
 
 // Allow unauthenticated invocations so mcp-remote can reach OAuth discovery endpoints
