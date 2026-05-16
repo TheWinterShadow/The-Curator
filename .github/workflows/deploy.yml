@@ -126,6 +126,10 @@ jobs:
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
           TF_VAR_podcast_service_image_uri: ${{ env.IMAGE_URI }}
+          TF_VAR_google_client_id: ${{ secrets.GOOGLE_CLIENT_ID }}
+          TF_VAR_google_client_secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          TF_VAR_allowed_email: ${{ secrets.ALLOWED_EMAIL }}
+          TF_VAR_server_url: ${{ secrets.SERVER_URL }}
 
       - name: Terraform Plan
         working-directory: terraform
@@ -133,6 +137,10 @@ jobs:
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
           TF_VAR_podcast_service_image_uri: ${{ env.IMAGE_URI }}
+          TF_VAR_google_client_id: ${{ secrets.GOOGLE_CLIENT_ID }}
+          TF_VAR_google_client_secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          TF_VAR_allowed_email: ${{ secrets.ALLOWED_EMAIL }}
+          TF_VAR_server_url: ${{ secrets.SERVER_URL }}
 
       - name: Terraform Apply
         working-directory: terraform
@@ -140,3 +148,7 @@ jobs:
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
           TF_VAR_podcast_service_image_uri: ${{ env.IMAGE_URI }}
+          TF_VAR_google_client_id: ${{ secrets.GOOGLE_CLIENT_ID }}
+          TF_VAR_google_client_secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          TF_VAR_allowed_email: ${{ secrets.ALLOWED_EMAIL }}
+          TF_VAR_server_url: ${{ secrets.SERVER_URL }}
