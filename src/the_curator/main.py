@@ -85,7 +85,7 @@ def create_podcast_episode(title: str, transcript: list[tuple[str, str]]) -> dic
             author="The Curator",
             description=f"In this episode, we dive into the fascinating topic of {title}.",
             audio_url=f"https://storage.googleapis.com/{bucket_name}/{destination_blob_name}",  # noqa: E501
-            audio_length=os.path.getsize(audio_file_name)
+            audio_length=os.path.getsize(audio_file_name),
         )
 
         return {"episode_id": audio_file_name, "status": "created"}
