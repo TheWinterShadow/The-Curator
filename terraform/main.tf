@@ -130,15 +130,16 @@ resource "google_secret_manager_secret_iam_member" "allowed_email_accessor" {
 
 // Public bucket for episode audio files
 resource "google_storage_bucket" "podcast_data" {
-  name          = "the-curator-podcast-data"
-  location      = "US"
-  force_destroy = true
+  name                        = "the-curator-podcast-data"
+  location                    = "US"
+  force_destroy               = true
+  uniform_bucket_level_access = true
 }
 
-resource "google_storage_bucket_access_control" "public_rule" {
+resource "google_storage_bucket_iam_member" "public_read" {
   bucket = google_storage_bucket.podcast_data.name
-  role   = "READER"
-  entity = "allUsers"
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
 }
 
 // Private bucket for OAuth state (tokens must not be publicly accessible)
