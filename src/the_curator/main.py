@@ -5,6 +5,7 @@ import os
 from google.cloud import storage
 from mcp.server.auth.settings import AuthSettings, ClientRegistrationOptions, RevocationOptions
 from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp.server import TransportSecuritySettings
 from pydantic import AnyHttpUrl
 from starlette.requests import Request
 from starlette.responses import JSONResponse, RedirectResponse, Response
@@ -25,6 +26,8 @@ oauth_provider = GoogleOAuthProvider(
     gcs_bucket=os.environ.get("OAUTH_STATE_BUCKET", "the-curator-oauth-state"),
 )
 
+_parsed_host = AnyHttpUrl(_server_url).host or "localhost"
+
 mcp = FastMCP(
     "The Curator",
     auth_server_provider=oauth_provider,
@@ -38,6 +41,9 @@ mcp = FastMCP(
         ),
         revocation_options=RevocationOptions(enabled=True),
         required_scopes=[],
+    ),
+    transport_security=TransportSecuritySettings(
+        allowed_hosts=[_parsed_host],
     ),
 )
 
