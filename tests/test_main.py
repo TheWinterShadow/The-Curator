@@ -29,6 +29,8 @@ def test_create_podcast_episode(monkeypatch: pytest.MonkeyPatch) -> None:
     mock_gen = MagicMock()
     mock_gen.generate_podcast.return_value = "/tmp/podcast.wav"
     monkeypatch.setattr(main_module, "generator", mock_gen)
+    monkeypatch.setattr(main_module.storage, "Client", MagicMock())
+    monkeypatch.setattr(main_module.os.path, "getsize", MagicMock(return_value=1024))
 
     transcript = [("Annabelle", "Hello"), ("Link", "Hi")]
     result = create_podcast_episode("Test Episode", transcript)

@@ -1,6 +1,7 @@
 import os
 import tempfile
 
+from the_curator.utils.rss import RSSFeed
 from the_curator.utils.vertex_client import VertexClient
 
 
@@ -41,12 +42,36 @@ class PodcastGeneration:
         for line in response.splitlines():
             line = line.strip()
             if line.startswith("Annabelle:"):
-                turns.append(("Annabelle", line[len("Annabelle:") :].strip()))
+                turns.append(("Annabelle", line[len("Annabelle:"):].strip()))
             elif line.startswith("Link:"):
-                turns.append(("Link", line[len("Link:") :].strip()))
+                turns.append(("Link", line[len("Link:"):].strip()))
         return turns
 
     def generate_podcast(self, transcript: list[tuple[str, str]]) -> str:
         speaker_map = {"Annabelle": "Kore", "Link": "Puck"}
         _, filename = tempfile.mkstemp(suffix=".wav", prefix="podcast_")
         return self.vertex_client.synthesize_conversation(transcript, speaker_map, filename)
+
+    def publish_episode(
+        self,
+        title: str,
+        sub_title: str,
+        summary: str,
+        author: str,
+        description: str,
+        audio_url: str,
+        audio_length: int
+    ) -> None:
+        rss_feed = RSSFeed(bucket_name=os.environ.get(
+            "GCS_BUCKET_NAME", "the-curator-podcast-data"), file_path='feed.xml')
+        rss_feed.load()
+        rss_feed.add_item(
+            title=title,
+            sub_title=sub_title,
+            summary=summary,
+            author=author,
+            description=description,
+            link=audio_url,
+            length=audio_length
+        )
+        rss_feed.save()

@@ -78,6 +78,15 @@ def create_podcast_episode(title: str, transcript: list[tuple[str, str]]) -> dic
         blob = bucket.blob(destination_blob_name)
         blob.upload_from_filename(audio_file_name)
         print(f"File {audio_file_name} uploaded to {blob.name}.")
+        generator.publish_episode(
+            title=title,
+            sub_title=f"An episode about {title}",
+            summary=f"This episode explores the topic of {title} in depth.",
+            author="The Curator",
+            description=f"In this episode, we dive into the fascinating topic of {title}.",
+            audio_url=f"https://storage.googleapis.com/{bucket_name}/{destination_blob_name}",  # noqa: E501
+            audio_length=os.path.getsize(audio_file_name)
+        )
 
         return {"episode_id": audio_file_name, "status": "created"}
     except Exception as exc:
