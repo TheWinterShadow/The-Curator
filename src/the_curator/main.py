@@ -1,6 +1,7 @@
 import datetime
 import logging
 import os
+import traceback
 
 from google.cloud import storage
 from mcp.server.auth.settings import AuthSettings, ClientRegistrationOptions, RevocationOptions
@@ -53,26 +54,36 @@ generator = PodcastGeneration()
 @mcp.tool()
 def create_podcast_transcript(topic: str) -> list[tuple[str, str]]:
     """Create a podcast transcript on the given topic."""
-    return generator.generate_transcript(topic)
+    try:
+        return generator.generate_transcript(topic)
+    except Exception as exc:
+        logger.error("Error generating transcript: %s", exc)
+        logger.debug("Traceback: %s", traceback.format_exc())
+        raise ValueError(f"Failed to generate transcript: {exc}")
 
 
 @mcp.tool()
 def create_podcast_episode(title: str, transcript: list[tuple[str, str]]) -> dict[str, str]:
     """Create a podcast episode with the given title and transcript."""
-    audio_file_name = generator.generate_podcast(transcript)
+    try:
+        audio_file_name = generator.generate_podcast(transcript)
 
-    storage_client = storage.Client()
-    bucket_name = os.environ.get("GCS_BUCKET_NAME", "the-curator-podcast-data")
-    print(f"Uploading {audio_file_name} to bucket {bucket_name}...")
-    bucket = storage_client.bucket(bucket_name)
-    ts = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
-    destination_blob_name = f"episodes/{ts}/{title.replace(' ', '_')}.wav"
-    print(f"Uploading file to {destination_blob_name}...")
-    blob = bucket.blob(destination_blob_name)
-    blob.upload_from_filename(audio_file_name)
-    print(f"File {audio_file_name} uploaded to {blob.name}.")
+        storage_client = storage.Client()
+        bucket_name = os.environ.get("GCS_BUCKET_NAME", "the-curator-podcast-data")
+        print(f"Uploading {audio_file_name} to bucket {bucket_name}...")
+        bucket = storage_client.bucket(bucket_name)
+        ts = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
+        destination_blob_name = f"episodes/{ts}/{title.replace(' ', '_')}.wav"
+        print(f"Uploading file to {destination_blob_name}...")
+        blob = bucket.blob(destination_blob_name)
+        blob.upload_from_filename(audio_file_name)
+        print(f"File {audio_file_name} uploaded to {blob.name}.")
 
-    return {"episode_id": audio_file_name, "status": "created"}
+        return {"episode_id": audio_file_name, "status": "created"}
+    except Exception as exc:
+        logger.error("Error generating podcast episode: %s", exc)
+        logger.debug("Traceback: %s", traceback.format_exc())
+        raise ValueError(f"Failed to generate podcast episode: {exc}")
 
 
 async def health(request: Request) -> JSONResponse:
