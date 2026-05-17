@@ -59,7 +59,7 @@ def create_podcast_transcript(topic: str) -> list[tuple[str, str]]:
     except Exception as exc:
         logger.error("Error generating transcript: %s", exc)
         logger.debug("Traceback: %s", traceback.format_exc())
-        raise ValueError(f"Failed to generate transcript: {exc}")
+        raise RuntimeError(f"Failed to generate transcript: {exc}") from exc
 
 
 @mcp.tool()
@@ -83,7 +83,7 @@ def create_podcast_episode(title: str, transcript: list[tuple[str, str]]) -> dic
     except Exception as exc:
         logger.error("Error generating podcast episode: %s", exc)
         logger.debug("Traceback: %s", traceback.format_exc())
-        raise ValueError(f"Failed to generate podcast episode: {exc}")
+        raise RuntimeError(f"Failed to generate podcast episode: {exc}") from exc
 
 
 async def health(request: Request) -> JSONResponse:
