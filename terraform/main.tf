@@ -181,6 +181,11 @@ resource "google_cloud_run_v2_service" "podcast_service" {
       }
 
       env {
+        name  = "GOOGLE_CLOUD_PROJECT"
+        value = "the-curator-496412"
+      }
+
+      env {
         name  = "GCS_BUCKET_NAME"
         value = google_storage_bucket.podcast_data.name
       }
