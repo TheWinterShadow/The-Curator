@@ -52,21 +52,10 @@ generator = PodcastGeneration()
 
 
 @mcp.tool()
-def create_podcast_transcript(topic: str) -> list[tuple[str, str]]:
-    """Create a podcast transcript on the given topic."""
-    try:
-        return generator.generate_transcript(topic)
-    except Exception as exc:
-        logger.error("Error generating transcript: %s", exc)
-        logger.debug("Traceback: %s", traceback.format_exc())
-        raise RuntimeError(f"Failed to generate transcript: {exc}") from exc
-
-
-@mcp.tool()
-def create_podcast_episode(title: str, transcript: list[tuple[str, str]]) -> dict[str, str]:
+def create_podcast_episode(topic: str, title: str) -> dict[str, str]:
     """Create a podcast episode with the given title and transcript."""
     try:
-        audio_file_name = generator.generate_podcast(transcript)
+        audio_file_name = generator.generate_podcast(generator.generate_transcript(topic))
 
         storage_client = storage.Client()
         bucket_name = os.environ.get("GCS_BUCKET_NAME", "the-curator-podcast-data")
