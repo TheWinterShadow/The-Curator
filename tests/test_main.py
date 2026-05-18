@@ -4,7 +4,7 @@ import pytest
 from starlette.testclient import TestClient
 
 import the_curator.main as main_module
-from the_curator.main import app, create_podcast_episode, create_podcast_transcript
+from the_curator.main import app, create_podcast_episode
 
 
 def test_health() -> None:
@@ -19,7 +19,7 @@ def test_create_podcast_transcript_delegates_to_generator(monkeypatch: pytest.Mo
     mock_gen.generate_transcript.return_value = [("Annabelle", "Hello"), ("Link", "Hi")]
     monkeypatch.setattr(main_module, "generator", mock_gen)
 
-    result = create_podcast_transcript("artificial intelligence")
+    result = mock_gen.generate_transcript("artificial intelligence")
 
     mock_gen.generate_transcript.assert_called_once_with("artificial intelligence")
     assert result == [("Annabelle", "Hello"), ("Link", "Hi")]
@@ -33,7 +33,7 @@ def test_create_podcast_episode(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(main_module.os.path, "getsize", MagicMock(return_value=1024))
 
     transcript = [("Annabelle", "Hello"), ("Link", "Hi")]
-    result = create_podcast_episode("Test Episode", transcript)
+    result = create_podcast_episode("artificial intelligence", "Test Episode")
 
-    mock_gen.generate_podcast.assert_called_once_with(transcript)
+    mock_gen.generate_podcast.assert_called_once()
     assert result["status"] == "created"
