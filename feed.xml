@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
+  <channel>
+    <title>The Curator</title>
+    <description>The Curator generates AI-powered podcast episodes on demand. Give it a topic and get a fully voiced episode with hosts Annabelle and Link in minutes.</description>
+    <link>https://the-curator.thewintershadow.com</link>
+    <managingEditor>contact@thewintershadow.com (The Curator)</managingEditor>
+    <webMaster>contact@thewintershadow.com (The Curator)</webMaster>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 17 May 2026 09:06:22 +0000</lastBuildDate>
+    <pubDate>Sun, 17 May 2026 09:06:22 +0000</pubDate>
+    <generator>The Curator RSS Generator</generator>
+    <itunes:subtitle>AI-powered podcasts on any topic, in minutes.</itunes:subtitle>
+    <itunes:author>The Curator</itunes:author>
+    <itunes:email>contact@thewintershadow.com</itunes:email>
+    <itunes:summary>The Curator generates AI-powered podcast episodes on demand. Give it a topic and get a fully voiced episode with hosts Annabelle and Link in minutes.</itunes:summary>
+    <itunes:explicit>no</itunes:explicit>
+    <itunes:owner>
+      <itunes:name>The Curator</itunes:name>
+      <itunes:email>contact@thewintershadow.com</itunes:email>
+    </itunes:owner>
+    <itunes:category text="Education" />
+    <image>
+      <url>https://storage.googleapis.com/the-curator-podcast-data/the-curator.jpg</url>
+      <title>The Curator</title>
+      <link />
+      <width>1400</width>
+      <height>1400</height>
+    </image>
+    <itunes:image href="https://storage.googleapis.com/the-curator-podcast-data/the-curator.jpg" />
+
+  </channel>
+</rss>
