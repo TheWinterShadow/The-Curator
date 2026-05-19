@@ -14,17 +14,6 @@ def test_health() -> None:
     assert response.json() == {"service": "the-curator", "status": "ok"}
 
 
-def test_create_podcast_transcript_delegates_to_generator(monkeypatch: pytest.MonkeyPatch) -> None:
-    mock_gen = MagicMock()
-    mock_gen.generate_transcript.return_value = [("Annabelle", "Hello"), ("Link", "Hi")]
-    monkeypatch.setattr(main_module, "generator", mock_gen)
-
-    result = mock_gen.generate_transcript("artificial intelligence")
-
-    mock_gen.generate_transcript.assert_called_once_with("artificial intelligence")
-    assert result == [("Annabelle", "Hello"), ("Link", "Hi")]
-
-
 def test_create_podcast_episode(monkeypatch: pytest.MonkeyPatch) -> None:
     mock_gen = MagicMock()
     mock_gen.generate_podcast.return_value = "/tmp/podcast.wav"
