@@ -38,8 +38,8 @@ class VertexClient:
                 max_tokens=8096,
                 messages=[{"role": "user", "content": contents}],
             )
-            return message.content[0].text  # type: ignore[union-attr]
-        response = self.genai_client.models.generate_content(model=model, contents=contents)  # type: ignore[union-attr]
+            return message.content[0].text
+        response = self.genai_client.models.generate_content(model=model, contents=contents)
         return str(response.text)
 
     def synthesize_conversation(
@@ -88,15 +88,15 @@ class VertexClient:
             full_text = f"[short pause] {text}" if i > 0 else text
 
             try:
-                response = self.tts_client.models.generate_content(  # type: ignore[union-attr]
+                response = self.tts_client.models.generate_content(
                     model="gemini-3.1-flash-tts-preview", contents=full_text, config=config
                 )
 
                 # 3. Collect raw PCM bytes
                 candidates = response.candidates or []
-                inline_data = candidates[0].content.parts[0].inline_data  # type: ignore[index,union-attr]
+                inline_data = candidates[0].content.parts[0].inline_data
                 if inline_data and inline_data.data:
-                    combined_pcm.extend(inline_data.data)  # type: ignore[arg-type]
+                    combined_pcm.extend(inline_data.data)
 
                 # Optional: Small sleep to respect rate limits if the transcript is huge
                 time.sleep(0.5)
